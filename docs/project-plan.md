@@ -2,7 +2,7 @@
 
 ## 1. Visão Geral
 
-Implementar do zero um microserviço simplificado de cobranças de bilhetagem:
+Microserviço simplificado de cobranças de bilhetagem:
 
 - criação de cobrança com lock distribuído
 - consulta de cobrança por id
