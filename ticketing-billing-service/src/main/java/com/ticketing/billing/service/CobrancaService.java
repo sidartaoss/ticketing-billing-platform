@@ -80,18 +80,6 @@ public class CobrancaService {
         }
     }
 
-    private Cobranca buildCobranca(CobrancaRequestDTO request, String idUsuario) {
-        Cobranca cobranca = new Cobranca();
-        cobranca.setIdUsuario(idUsuario);
-        cobranca.setNomeSolicitante(userContext.getGivenName() + " " + userContext.getFamilyName());
-        cobranca.setTipo(request.tipo() != null ? request.tipo() : CobrancaTipoEnum.RECARGA);
-        cobranca.setMetodo(request.metodo() != null ? request.metodo() : CobrancaMetodoEnum.PIX);
-        cobranca.setStatus(CobrancaStatusEnum.SOLICITADA);
-        cobranca.setValorSolicitacao(request.valor());
-        cobranca.setDataCriacao(LocalDateTime.now(ZONE_SAO_PAULO));
-        return cobranca;
-    }
-
     public CobrancaCompletoResponseDTO consultarCobrancaPorId(Long id) {
         Cobranca cobranca = cobrancaRepository.findById(id)
                 .orElseThrow(() -> new CobrancaNaoEncontradaException(id));
@@ -138,6 +126,18 @@ public class CobrancaService {
 
         Cobranca saved = criarNovaVersao(cobranca, CobrancaStatusEnum.FINALIZADA);
         return toCompletoResponse(saved);
+    }
+
+    private Cobranca buildCobranca(CobrancaRequestDTO request, String idUsuario) {
+        Cobranca cobranca = new Cobranca();
+        cobranca.setIdUsuario(idUsuario);
+        cobranca.setNomeSolicitante(userContext.getGivenName() + " " + userContext.getFamilyName());
+        cobranca.setTipo(request.tipo() != null ? request.tipo() : CobrancaTipoEnum.RECARGA);
+        cobranca.setMetodo(request.metodo() != null ? request.metodo() : CobrancaMetodoEnum.PIX);
+        cobranca.setStatus(CobrancaStatusEnum.SOLICITADA);
+        cobranca.setValorSolicitacao(request.valor());
+        cobranca.setDataCriacao(LocalDateTime.now(ZONE_SAO_PAULO));
+        return cobranca;
     }
 
     private void finalizarCobrancaPix(Cobranca original, PixWebhookDTO.PixItemDTO item) {
