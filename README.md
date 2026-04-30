@@ -29,7 +29,7 @@ cd ticketing-billing-service
 docker-compose up -d
 ```
 
-Verificar se os serviços estao prontos:
+Verificar se os serviços estão prontos:
 
 ```bash
 docker compose exec postgres pg_isready -U brasilia
@@ -83,10 +83,10 @@ docker-compose down -v
 
 ## Premissas Adotadas
 
-- **Clientes externos sao mocks/fakes**: `PagamentoGatewayClient`, `CheckoutValidationClient`, `StatusConsultaExternaClient` simulam integracao. O foco e no comportamento de negocio, nao na integracao real.
+- **Clientes externos são mocks/fakes**: `PagamentoGatewayClient`, `CheckoutValidationClient`, `StatusConsultaExternaClient` simulam integração. O foco e no comportamento de negócio, não na integração real.
 - **UserContext mockavel**: simula usuário autenticado com `idUsuario`, `givenName`, `familyName` e `cpf`.
-- **Lock distribuído dual-mode**: Redis em produção com `@ConditionalOnBean`; fallback automatico para `ConcurrentHashMap` in-memory quando Redis esta indisponivel (`@ConditionalOnMissingBean`).
-- **Versionamento de cobranças**: cada mudança de status (reprocessamento, finalização via webhook) cria uma nova versao com referencia a anterior via `cobrancaPaiId`. A consulta retorna sempre a versao mais recente.
+- **Lock distribuído dual-mode**: Redis em produção com `@ConditionalOnBean`; fallback automatico para `ConcurrentHashMap` in-memory quando Redis esta indisponível (`@ConditionalOnMissingBean`).
+- **Versionamento de cobranças**: cada mudança de status (reprocessamento, finalização via webhook) cria uma nova versão com referência a anterior via `cobrancaPaiId`. A consulta retorna sempre a versão mais recente.
 - **Timezone oficial**: `America/Sao_Paulo` para todas as datas de negócio.
 - **PIX**: expiração de 30 minutos após criação.
 - **Defaults**: `metodo = PIX` e `tipo = RECARGA` quando não informados no request.
@@ -98,8 +98,8 @@ docker-compose down -v
 |-------------------------------------|-------------------------------------------------|--------------------------------------------------------|
 | **Redis lock vs. lock em banco**    | Baixa latência, operação atômica com TTL nativo | Exige Redis rodando; mitigado com fallback in-memory   |
 | **Mocks de integração**             | Autonomia total, foco nas regras de negócio     | Não valida contrato real com serviços externos         |
-| **Versionamento por novo registro** | Historico completo e auditável de cada cobrança | Maior volume de dados vs. update in-place              |
-| **DDL auto-update (Hibernate)**     | Prático para desenvolvimento rapido             | Inadequado para produção — ideal usar Flyway/Liquibase |
+| **Versionamento por novo registro** | Histórico completo e auditável de cada cobrança | Maior volume de dados vs. update in-place              |
+| **DDL auto-update (Hibernate)**     | Prático para desenvolvimento rápido             | Inadequado para produção — ideal usar Flyway/Liquibase |
 | **Kafka para eventos**              | Desacopla consumidores, extensível              | Adiciona complexidade de infraestrutura                |
 | **Strategy pattern (PIX/Cartão)**   | Extensível para novos métodos de pagamento      | Leve overhead para apenas 2 implementações             |
 
@@ -265,7 +265,7 @@ curl -X POST http://localhost:8080/api/v1/cobrancas/txn-xyz-123/validate \
 ```
 com.ticketing.billing
 ├── controller/       # REST endpoints
-├── service/          # Logica de negócio (CobrancaService, CobrancaEventPublisher)
+├── service/          # Lógica de negócio (CobrancaService, CobrancaEventPublisher)
 │   └── strategy/     # Estratégias de criação por método (PIX, Cartão)
 ├── repository/       # JPA repositories
 ├── domain/           # Entidades e enums
