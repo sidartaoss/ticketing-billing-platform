@@ -1,23 +1,23 @@
 # Ticketing Billing Platform
 
-Microservico simplificado de cobrancas de bilhetagem. Implementa criacao de cobrancas com lock distribuido, consulta por ID com versionamento, processamento de webhook PIX e validacao de checkout de cartao de credito.
+Microservico simplificado de cobranças de bilhetagem. Implementa criação de cobranças com lock distribuído, consulta por ID com versionamento, processamento de webhook PIX e validação de checkout de cartão de crédito.
 
-## Stack Tecnologica
+## Stack Tecnológica
 
-| Camada         | Tecnologia                                |
-|----------------|-------------------------------------------|
-| Linguagem      | Java 25                                   |
-| Framework      | Spring Boot 4.0.6                         |
-| Build          | Maven (wrapper incluso)                   |
-| Persistencia   | JPA/Hibernate + PostgreSQL 16             |
-| Lock           | Redis 7 (fallback in-memory)              |
-| Mensageria     | Apache Kafka 4.1.1                        |
-| Testes         | JUnit 5, Mockito, H2 (integracao)        |
-| Cobertura      | JaCoCo (minimo 70% no pacote `service`)   |
+| Camada       | Tecnologia                                |
+|--------------|-------------------------------------------|
+| Linguagem    | Java 25                                   |
+| Framework    | Spring Boot 4.0.6                         |
+| Build        | Maven (wrapper incluso)                   |
+| Persistência | JPA/Hibernate + PostgreSQL 16             |
+| Lock         | Redis 7 (fallback in-memory)              |
+| Mensageria   | Apache Kafka 4.1.1                        |
+| Testes       | JUnit 5, Mockito, H2 (integracao)        |
+| Cobertura    | JaCoCo (minimo 70% no pacote `service`)   |
 
 ## Como Executar
 
-### Pre-requisitos
+### Pré-requisitos
 
 - JDK 25+
 - Docker e Docker Compose
@@ -29,7 +29,7 @@ cd ticketing-billing-service
 docker-compose up -d
 ```
 
-Verificar se os servicos estao prontos:
+Verificar se os serviços estao prontos:
 
 ```bash
 docker compose exec postgres pg_isready -U brasilia
@@ -49,7 +49,7 @@ docker compose exec redis redis-cli ping
 mvnw.cmd clean package
 ```
 
-### 3. Iniciar a aplicacao
+### 3. Iniciar a aplicação
 
 ```bash
 # Linux/macOS
@@ -59,7 +59,7 @@ mvnw.cmd clean package
 mvnw.cmd spring-boot:run
 ```
 
-A aplicacao inicia em **http://localhost:8080**.
+A aplicação inicia em **http://localhost:8080**.
 
 ### 4. Rodar os testes
 
@@ -67,12 +67,12 @@ A aplicacao inicia em **http://localhost:8080**.
 ./mvnw test
 ```
 
-Os testes utilizam H2 em memoria e nao dependem de infraestrutura externa.
+Os testes utilizam H2 em memória e nao dependem de infraestrutura externa.
 
 ### 5. Parar o ambiente
 
 ```bash
-# Parar aplicacao: Ctrl+C no terminal
+# Parar aplicação: Ctrl+C no terminal
 
 # Parar infraestrutura (preserva dados)
 docker-compose down
@@ -84,24 +84,24 @@ docker-compose down -v
 ## Premissas Adotadas
 
 - **Clientes externos sao mocks/fakes**: `PagamentoGatewayClient`, `CheckoutValidationClient`, `StatusConsultaExternaClient` simulam integracao. O foco e no comportamento de negocio, nao na integracao real.
-- **UserContext mockavel**: simula usuario autenticado com `idUsuario`, `givenName`, `familyName` e `cpf`.
-- **Lock distribuido dual-mode**: Redis em producao com `@ConditionalOnBean`; fallback automatico para `ConcurrentHashMap` in-memory quando Redis esta indisponivel (`@ConditionalOnMissingBean`).
-- **Versionamento de cobrancas**: cada mudanca de status (reprocessamento, finalizacao via webhook) cria uma nova versao com referencia a anterior via `cobrancaPaiId`. A consulta retorna sempre a versao mais recente.
-- **Timezone oficial**: `America/Sao_Paulo` para todas as datas de negocio.
-- **PIX**: expiracao de 30 minutos apos criacao.
-- **Defaults**: `metodo = PIX` e `tipo = RECARGA` quando nao informados no request.
-- **Banco de testes**: H2 em memoria com perfil `test`, sem dependencia de Docker.
+- **UserContext mockavel**: simula usuário autenticado com `idUsuario`, `givenName`, `familyName` e `cpf`.
+- **Lock distribuído dual-mode**: Redis em produção com `@ConditionalOnBean`; fallback automatico para `ConcurrentHashMap` in-memory quando Redis esta indisponivel (`@ConditionalOnMissingBean`).
+- **Versionamento de cobranças**: cada mudança de status (reprocessamento, finalização via webhook) cria uma nova versao com referencia a anterior via `cobrancaPaiId`. A consulta retorna sempre a versao mais recente.
+- **Timezone oficial**: `America/Sao_Paulo` para todas as datas de negócio.
+- **PIX**: expiração de 30 minutos após criação.
+- **Defaults**: `metodo = PIX` e `tipo = RECARGA` quando não informados no request.
+- **Banco de testes**: H2 em memória com perfil `test`, sem dependência de Docker.
 
 ## Trade-offs
 
-| Decisao | Beneficio | Custo |
-|---------|-----------|-------|
-| **Redis lock vs. lock em banco** | Baixa latencia, operacao atomica com TTL nativo | Exige Redis rodando; mitigado com fallback in-memory |
-| **Mocks de integracao** | Autonomia total, foco nas regras de negocio | Nao valida contrato real com servicos externos |
-| **Versionamento por novo registro** | Historico completo e auditavel de cada cobranca | Maior volume de dados vs. update in-place |
-| **DDL auto-update (Hibernate)** | Pratico para desenvolvimento rapido | Inadequado para producao — ideal usar Flyway/Liquibase |
-| **Kafka para eventos** | Desacopla consumidores, extensivel | Adiciona complexidade de infraestrutura |
-| **Strategy pattern (PIX/Cartao)** | Extensivel para novos metodos de pagamento | Leve overhead para apenas 2 implementacoes |
+| Decisão                             | Benefício                                       | Custo                                                  |
+|-------------------------------------|-------------------------------------------------|--------------------------------------------------------|
+| **Redis lock vs. lock em banco**    | Baixa latência, operação atômica com TTL nativo | Exige Redis rodando; mitigado com fallback in-memory   |
+| **Mocks de integração**             | Autonomia total, foco nas regras de negócio     | Não valida contrato real com serviços externos         |
+| **Versionamento por novo registro** | Historico completo e auditável de cada cobrança | Maior volume de dados vs. update in-place              |
+| **DDL auto-update (Hibernate)**     | Prático para desenvolvimento rapido             | Inadequado para produção — ideal usar Flyway/Liquibase |
+| **Kafka para eventos**              | Desacopla consumidores, extensível              | Adiciona complexidade de infraestrutura                |
+| **Strategy pattern (PIX/Cartao)**   | Extensivel para novos métodos de pagamento      | Leve overhead para apenas 2 implementações             |
 
 ## Endpoints e Exemplos de Requests/Responses
 
@@ -111,7 +111,7 @@ Base path: `/api/v1/cobrancas`
 
 ### POST `/api/v1/cobrancas` — Criar Cobranca
 
-Cria uma cobranca com lock distribuido por usuario (chave `cobrancas:{idUsuario}`, TTL 5s).
+Cria uma cobrança com lock distribuído por usuário (chave `cobrancas:{idUsuario}`, TTL 5s).
 
 **Request (PIX):**
 
@@ -139,7 +139,7 @@ curl -X POST http://localhost:8080/api/v1/cobrancas \
 }
 ```
 
-**Request (Cartao de Credito):**
+**Request (Cartão de Crédito):**
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/cobrancas \
@@ -167,9 +167,9 @@ curl -X POST http://localhost:8080/api/v1/cobrancas \
 
 ---
 
-### GET `/api/v1/cobrancas/{id}` — Consultar Cobranca
+### GET `/api/v1/cobrancas/{id}` — Consultar Cobrança
 
-Retorna a versao mais recente da cobranca. Para cobrancas PIX com status pendente, consulta status externo e cria nova versao se houve mudanca.
+Retorna a versão mais recente da cobrança. Para cobranças PIX com status pendente, consulta status externo e cria nova versão se houve mudança.
 
 ```bash
 curl http://localhost:8080/api/v1/cobrancas/1
@@ -197,7 +197,7 @@ curl http://localhost:8080/api/v1/cobrancas/1
 
 ### POST `/api/v1/cobrancas/webhook/pix` — Webhook PIX
 
-Recebe notificacoes de pagamento PIX. Para cada item com `txid` valido, finaliza a cobranca pendente criando nova versao com status `FINALIZADA`.
+Recebe notificações de pagamento PIX. Para cada item com `txid` valido, finaliza a cobrança pendente criando nova versão com status `FINALIZADA`.
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/cobrancas/webhook/pix \
@@ -219,7 +219,7 @@ curl -X POST http://localhost:8080/api/v1/cobrancas/webhook/pix \
 
 ### POST `/api/v1/cobrancas/{transactionId}/validate` — Validar Checkout Cartao
 
-Valida o desafio 3D Secure de uma cobranca de cartao de credito.
+Valida o desafio 3D Secure de uma cobrança de cartão de crédito.
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/cobrancas/txn-xyz-123/validate \
@@ -253,27 +253,27 @@ curl -X POST http://localhost:8080/api/v1/cobrancas/txn-xyz-123/validate \
 
 ### Respostas de Erro
 
-| Status | Cenario | Exemplo |
-|--------|---------|---------|
-| `409 Conflict` | Lock indisponivel (cobranca em andamento para o usuario) | `{"erro": "Geracao de cobranca em andamento."}` |
-| `404 Not Found` | Cobranca nao encontrada por ID | `{"erro": "Cobranca nao encontrada: 99"}` |
-| `404 Not Found` | Cobranca nao encontrada por transactionId | `{"erro": "Cobranca nao encontrada para transactionId: xyz"}` |
-| `500 Internal Server Error` | Erro inesperado na criacao | `{"erro": "Erro ao criar cobranca."}` |
+| Status | Cenario                                                  | Exemplo                                                       |
+|--------|----------------------------------------------------------|---------------------------------------------------------------|
+| `409 Conflict` | Lock indisponível (cobrança em andamento para o usuário) | `{"erro": "Geracao de cobranca em andamento."}`               |
+| `404 Not Found` | Cobrança nao encontrada por ID                           | `{"erro": "Cobrança não encontrada: 99"}`                     |
+| `404 Not Found` | Cobrança nao encontrada por transactionId                | `{"erro": "Cobrança não encontrada para transactionId: xyz"}` |
+| `500 Internal Server Error` | Erro inesperado na criação                               | `{"erro": "Erro ao criar cobrança."}`                         |
 
 ## Arquitetura
 
 ```
 com.ticketing.billing
 ├── controller/       # REST endpoints
-├── service/          # Logica de negocio (CobrancaService, CobrancaEventPublisher)
-│   └── strategy/     # Estrategias de criacao por metodo (PIX, Cartao)
+├── service/          # Logica de negócio (CobrancaService, CobrancaEventPublisher)
+│   └── strategy/     # Estratégias de criacao por método (PIX, Cartão)
 ├── repository/       # JPA repositories
 ├── domain/           # Entidades e enums
 ├── dto/              # Request/Response DTOs
 ├── integration/      # Clientes externos (mocks)
-├── lock/             # Lock distribuido (Redis + fallback in-memory)
-├── exception/        # Excecoes de negocio e handler global
-└── config/           # Configuracoes (Redis, Kafka)
+├── lock/             # Lock distribuído (Redis + fallback in-memory)
+├── exception/        # Excecoes de negócio e handler global
+└── config/           # Configurações (Redis, Kafka)
 ```
 
-Para detalhes completos da especificacao, consulte [docs/project-plan.md](docs/project-plan.md).
+Para detalhes completos da especificação, consulte [docs/project-plan.md](docs/project-plan.md).
