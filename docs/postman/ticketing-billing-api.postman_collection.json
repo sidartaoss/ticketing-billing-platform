@@ -43,6 +43,96 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Consultar Cobrança por ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/v1/cobrancas/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"cobrancas",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Processar Webhook PIX",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"pix\": [\n    {\n      \"txid\": \"abc123\",\n      \"horario\": \"2026-04-30T10:00:00Z\",\n      \"valor\": 25.50\n    }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/cobrancas/webhook/pix",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"cobrancas",
+						"webhook",
+						"pix"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Validar Checkout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"cavv\": \"AAABBBCCCdddEEEfffGGGhhhIII=\",\n  \"xid\": \"abc123def456\",\n  \"eci\": \"05\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/cobrancas/txn_abc123/validate",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"cobrancas",
+						"txn_abc123",
+						"validate"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

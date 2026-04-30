@@ -59,6 +59,8 @@ public class Cobranca {
 
     private LocalDateTime dataFinalizada;
 
+    private Long cobrancaPaiId;
+
     public Cobranca() {
     }
 
@@ -188,5 +190,13 @@ public class Cobranca {
 
     public void setDataFinalizada(LocalDateTime dataFinalizada) {
         this.dataFinalizada = dataFinalizada;
+    }
+
+    public Long getCobrancaPaiId() {
+        return cobrancaPaiId;
+    }
+
+    public void setCobrancaPaiId(Long cobrancaPaiId) {
+        this.cobrancaPaiId = cobrancaPaiId;
     }
 }
