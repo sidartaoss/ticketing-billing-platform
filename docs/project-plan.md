@@ -248,25 +248,12 @@ O importante é o comportamento de negócio, não a integração real.
 - Robustez em concorrência (lock)
 - Qualidade dos testes (valor, isolamento, legibilidade)
 - Tratamento de erro e contrato HTTP
-- Clareza do README
-
-## Documentação Esperada
-
-O repositório deve conter:
-
-- Código-fonte
-- Testes automatizados
-- `README.md` com:
-  - como executar
-  - premissas adotadas
-  - trade-offs
-  - exemplos de requests/responses
 
 ## Checklist de Implementação
 
-- [ ] `POST /api/v1/cobrancas` cria cobrança com lock por usuário
-- [ ] `GET /api/v1/cobrancas/{id}` retorna payload detalhado
-- [ ] `POST /api/v1/cobrancas/webhook/pix` finaliza cobrança por txid
-- [ ] `POST /api/v1/cobrancas/{transactionId}/validate` atualiza checkout
+- [ ] `POST /api/v1/cobrancas` criar cobrança com lock por usuário
+- [ ] `GET /api/v1/cobrancas/{id}` retornar payload detalhado
+- [ ] `POST /api/v1/cobrancas/webhook/pix` finalizar cobrança por txid
+- [ ] `POST /api/v1/cobrancas/{transactionId}/validate` atualizar checkout
 - [ ] testes unitários implementados
 - [ ] meta de cobertura atingida
