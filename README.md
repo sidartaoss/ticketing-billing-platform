@@ -101,7 +101,7 @@ docker-compose down -v
 | **Versionamento por novo registro** | Historico completo e auditável de cada cobrança | Maior volume de dados vs. update in-place              |
 | **DDL auto-update (Hibernate)**     | Prático para desenvolvimento rapido             | Inadequado para produção — ideal usar Flyway/Liquibase |
 | **Kafka para eventos**              | Desacopla consumidores, extensível              | Adiciona complexidade de infraestrutura                |
-| **Strategy pattern (PIX/Cartao)**   | Extensivel para novos métodos de pagamento      | Leve overhead para apenas 2 implementações             |
+| **Strategy pattern (PIX/Cartão)**   | Extensível para novos métodos de pagamento      | Leve overhead para apenas 2 implementações             |
 
 ## Endpoints e Exemplos de Requests/Responses
 
@@ -109,7 +109,7 @@ Base path: `/api/v1/cobrancas`
 
 ---
 
-### POST `/api/v1/cobrancas` — Criar Cobranca
+### POST `/api/v1/cobrancas` — Criar Cobrança
 
 Cria uma cobrança com lock distribuído por usuário (chave `cobrancas:{idUsuario}`, TTL 5s).
 
@@ -197,7 +197,7 @@ curl http://localhost:8080/api/v1/cobrancas/1
 
 ### POST `/api/v1/cobrancas/webhook/pix` — Webhook PIX
 
-Recebe notificações de pagamento PIX. Para cada item com `txid` valido, finaliza a cobrança pendente criando nova versão com status `FINALIZADA`.
+Recebe notificações de pagamento PIX. Para cada item com `txid` válido, finaliza a cobrança pendente criando nova versão com status `FINALIZADA`.
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/cobrancas/webhook/pix \
@@ -217,7 +217,7 @@ curl -X POST http://localhost:8080/api/v1/cobrancas/webhook/pix \
 
 ---
 
-### POST `/api/v1/cobrancas/{transactionId}/validate` — Validar Checkout Cartao
+### POST `/api/v1/cobrancas/{transactionId}/validate` — Validar Checkout Cartão
 
 Valida o desafio 3D Secure de uma cobrança de cartão de crédito.
 
@@ -255,9 +255,9 @@ curl -X POST http://localhost:8080/api/v1/cobrancas/txn-xyz-123/validate \
 
 | Status | Cenario                                                  | Exemplo                                                       |
 |--------|----------------------------------------------------------|---------------------------------------------------------------|
-| `409 Conflict` | Lock indisponível (cobrança em andamento para o usuário) | `{"erro": "Geracao de cobranca em andamento."}`               |
-| `404 Not Found` | Cobrança nao encontrada por ID                           | `{"erro": "Cobrança não encontrada: 99"}`                     |
-| `404 Not Found` | Cobrança nao encontrada por transactionId                | `{"erro": "Cobrança não encontrada para transactionId: xyz"}` |
+| `409 Conflict` | Lock indisponível (cobrança em andamento para o usuário) | `{"erro": "Geração de cobrança em andamento."}`               |
+| `404 Not Found` | Cobrança não encontrada por ID                           | `{"erro": "Cobrança não encontrada: 99"}`                     |
+| `404 Not Found` | Cobrança não encontrada por transactionId                | `{"erro": "Cobrança não encontrada para transactionId: xyz"}` |
 | `500 Internal Server Error` | Erro inesperado na criação                               | `{"erro": "Erro ao criar cobrança."}`                         |
 
 ## Arquitetura
@@ -266,7 +266,7 @@ curl -X POST http://localhost:8080/api/v1/cobrancas/txn-xyz-123/validate \
 com.ticketing.billing
 ├── controller/       # REST endpoints
 ├── service/          # Logica de negócio (CobrancaService, CobrancaEventPublisher)
-│   └── strategy/     # Estratégias de criacao por método (PIX, Cartão)
+│   └── strategy/     # Estratégias de criação por método (PIX, Cartão)
 ├── repository/       # JPA repositories
 ├── domain/           # Entidades e enums
 ├── dto/              # Request/Response DTOs
