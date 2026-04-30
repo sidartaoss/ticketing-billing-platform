@@ -85,7 +85,7 @@ docker-compose down -v
 
 - **Clientes externos são mocks/fakes**: `PagamentoGatewayClient`, `CheckoutValidationClient`, `StatusConsultaExternaClient` simulam integração. O foco e no comportamento de negócio, não na integração real.
 - **UserContext mockavel**: simula usuário autenticado com `idUsuario`, `givenName`, `familyName` e `cpf`.
-- **Lock distribuído dual-mode**: Redis em produção com `@ConditionalOnBean`; fallback automatico para `ConcurrentHashMap` in-memory quando Redis esta indisponível (`@ConditionalOnMissingBean`).
+- **Lock distribuído dual-mode**: Redis em produção com `@ConditionalOnBean`; fallback automático para `ConcurrentHashMap` in-memory quando Redis esta indisponível (`@ConditionalOnMissingBean`).
 - **Versionamento de cobranças**: cada mudança de status (reprocessamento, finalização via webhook) cria uma nova versão com referência a anterior via `cobrancaPaiId`. A consulta retorna sempre a versão mais recente.
 - **Timezone oficial**: `America/Sao_Paulo` para todas as datas de negócio.
 - **PIX**: expiração de 30 minutos após criação.
