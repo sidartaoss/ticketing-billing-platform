@@ -1,19 +1,19 @@
 # Ticketing Billing Platform
 
-Microservico simplificado de cobranças de bilhetagem. Implementa criação de cobranças com lock distribuído, consulta por ID com versionamento, processamento de webhook PIX e validação de checkout de cartão de crédito.
+Microserviço simplificado de cobranças de bilhetagem. Implementa criação de cobranças com lock distribuído, consulta por ID com versionamento, processamento de webhook PIX e validação de checkout de cartão de crédito.
 
 ## Stack Tecnológica
 
-| Camada       | Tecnologia                                |
-|--------------|-------------------------------------------|
-| Linguagem    | Java 25                                   |
-| Framework    | Spring Boot 4.0.6                         |
-| Build        | Maven (wrapper incluso)                   |
-| Persistência | JPA/Hibernate + PostgreSQL 16             |
-| Lock         | Redis 7 (fallback in-memory)              |
-| Mensageria   | Apache Kafka 4.1.1                        |
-| Testes       | JUnit 5, Mockito, H2 (integracao)        |
-| Cobertura    | JaCoCo (minimo 70% no pacote `service`)   |
+| Camada       | Tecnologia                              |
+|--------------|-----------------------------------------|
+| Linguagem    | Java 25                                 |
+| Framework    | Spring Boot 4.0.6                       |
+| Build        | Maven (wrapper incluso)                 |
+| Persistência | JPA/Hibernate + PostgreSQL 16           |
+| Lock         | Redis 7 (fallback in-memory)            |
+| Mensageria   | Apache Kafka 4.1.1                      |
+| Testes       | JUnit 5, Mockito, H2 (integração)       |
+| Cobertura    | JaCoCo (mínimo 70% no pacote `service`) |
 
 ## Como Executar
 
@@ -67,7 +67,7 @@ A aplicação inicia em **http://localhost:8080**.
 ./mvnw test
 ```
 
-Os testes utilizam H2 em memória e nao dependem de infraestrutura externa.
+Os testes utilizam H2 em memória e não dependem de infraestrutura externa.
 
 ### 5. Parar o ambiente
 
