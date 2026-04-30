@@ -1,0 +1,8 @@
+# Claude Code
+.claude/
+
+# IDE
+.idea/
+
+# Project documentation
+CLAUDE.md
